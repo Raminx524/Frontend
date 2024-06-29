@@ -9,27 +9,35 @@ function LoginPage() {
     console.log({ username, password });
   }
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="flex justify-center my-24">
       <form
         onSubmit={handleLogin}
-        className="flex sm:flex-row flex-col items-center sm:gap-3"
+        className="flex flex-row sm:flex-col items-center sm:gap-3 bg-blue-200 w-96 p-4 text-blue-900 border border-blue-300"
       >
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          name="username"
-          id="username"
-          className="border-2 border-black rounded-md w-56"
-        />
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          className="border-2 border-black rounded-md w-56"
-        />
-        <button>Login</button>
+        <h2 className="text-3xl">Log In</h2>
+        <div className="flex flex-col gap-4 py-2">
+          <div className="flex justify-between min-w-72">
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              className="border border-blue-200 focus:outline-none focus:border-blue-500 transition-all duration-300"
+            />
+          </div>
+          <div className="flex justify-between min-w-72">
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              className="border border-blue-200 focus:outline-none focus:border-blue-500 transition-all duration-300"
+            />
+          </div>
+        </div>
+        <button className="text-blue-900 transition-all duration-300 hover:bg-blue-900 hover:text-white px-4 py-2 bg-blue-100 border border-blue-200">
+          Login
+        </button>
       </form>
     </div>
   );

@@ -13,18 +13,53 @@ function RegisterPage() {
     console.log(newUser);
   }
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleRegister}>
-        <label htmlFor="username">Username:</label>
-        <input type="text" name="username" id="username" />
-        <label htmlFor="password">Password:</label>
-        <input type="password" name="password" id="password" />
-        <label htmlFor="firstName">First Name</label>
-        <input type="text" name="firstName" id="firstName" />
-        <label htmlFor="lastName">Last Name</label>
-        <input type="text" name="lastName" id="lastName" />
-        <button>Sign Up</button>
+    <div className="flex justify-center my-24">
+      <form
+        onSubmit={handleRegister}
+        className="flex flex-row sm:flex-col items-center sm:gap-4 bg-blue-200 w-96 p-4 text-blue-900 border border-blue-300"
+      >
+        <h2 className="text-3xl">Register</h2>
+        <div className="flex flex-col gap-4 py-2">
+          <div className="flex justify-between min-w-72">
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              className="border border-blue-200 focus:outline-none focus:border-blue-500 transition-all duration-300"
+            />
+          </div>
+          <div className="flex justify-between min-w-72">
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              className="border border-blue-200 focus:outline-none focus:border-blue-500 transition-all duration-300"
+            />
+          </div>
+          <div className="flex justify-between min-w-72">
+            <label htmlFor="firstName">First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              id="firstName"
+              className="border border-blue-200 focus:outline-none focus:border-blue-500 transition-all duration-300"
+            />
+          </div>
+          <div className="flex justify-between min-w-72">
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              className="border border-blue-200 focus:outline-none focus:border-blue-500 transition-all duration-300"
+            />
+          </div>
+        </div>
+        <button className="text-blue-900 transition-all duration-300 hover:bg-blue-900 hover:text-white px-4 py-2 bg-blue-100 border border-blue-200">
+          Sign Up
+        </button>
       </form>
     </div>
   );

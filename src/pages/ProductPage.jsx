@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useSearchParams } from "react-router-dom";
+import Pagination from "@mui/material/Pagination";
+import Input from "../components/ui-components/Input";
+import Box from "@mui/material/Box";
+import Slider from "@mui/material/Slider";
 
 const BASE_URL = "http://localhost:3000/api/product/";
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
+  const [maxPages, setMaxPages] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [sliderValue, setSliderValue] = React.useState([0, 10000]);
 
   useEffect(() => {
     async function getProducts() {
@@ -24,7 +30,10 @@ function ProductPage() {
           page: page,
         },
       };
+      const res = await axios.get(`${BASE_URL}/count`, options);
+      const totalProducts = res.data.count;
       const response = await axios.get(BASE_URL, options);
+      setMaxPages(Math.ceil(totalProducts / 3));
       setProducts(response.data);
     }
     getProducts();
@@ -46,32 +55,27 @@ function ProductPage() {
   }
 
   function handlePagination(ev) {
-    const value = ev.target.value;
+    const value = +ev.target.innerText;
     searchParams.set("page", value);
     setSearchParams(searchParams);
   }
+  function valuetext(value) {
+    return `$${value}`;
+  }
+  const handleSliderChange = (ev, newValue) => {
+    searchParams.set("minPrice", newValue[0]);
+    searchParams.set("maxPrice", newValue[1]);
+    setSearchParams(searchParams);
+    setSliderValue(newValue);
+  };
 
   return (
-    <div>
-      <div className="my-8 space-y-2 flex gap-4 items-baseline flex-col sm:flex-col sm:">
-        <div>
-          <div>
-            <label htmlFor="page">Page: </label>
-            <input
-              className="outline outline-black rounded-md"
-              min={1}
-              id="page"
-              name="page"
-              type="number"
-              value={searchParams.get("page") || "1"}
-              onChange={handlePagination}
-            />
-          </div>
-        </div>
-        <div>
+    <div className="flex flex-col items-center max-w-7xl m-auto">
+      <div className="my-8 flex-wrap space-y-2 flex gap-4 items-baseline flex-col sm:flex-row ">
+        <div className="flex items-center gap-1">
           <label htmlFor="isInStock">isInStock: </label>
           <input
-            className="outline border-black"
+            className="h-5 w-5"
             id="isInStock"
             name="isInStock"
             type="checkbox"
@@ -82,7 +86,7 @@ function ProductPage() {
         <div>
           <label htmlFor="name">Name: </label>
           <input
-            className="outline outline-black rounded-md"
+            className="border border-blue-200"
             id="name"
             name="name"
             type="text"
@@ -93,7 +97,7 @@ function ProductPage() {
         <div>
           <label htmlFor="category">Category: </label>
           <input
-            className="outline outline-black rounded-md"
+            className="border border-blue-200"
             id="category"
             name="category"
             type="text"
@@ -101,43 +105,45 @@ function ProductPage() {
             onChange={handleFilterChange}
           />
         </div>
-        <div>
-          <label htmlFor="minPrice">Minimum Price: </label>
-          <input
-            className="outline outline-black rounded-md"
-            id="minPrice"
-            type="number"
-            name="minPrice"
-            value={searchParams.get("minPrice") || 0}
-            onChange={handleFilterChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="maxPrice">Maximum Price: </label>
-          <input
-            className="outline outline-black rounded-md"
-            id="maxPrice"
-            type="number"
-            name="maxPrice"
-            value={searchParams.get("maxPrice") || 100}
-            onChange={handleFilterChange}
-          />
-        </div>
       </div>
-      <ul className="flex flex-col gap-4">
+      <div className="flex gap-10 justify-center">
+        <label>Price:</label>
+        <Box sx={{ width: 400 }}>
+          <Slider
+            getAriaLabel={() => "Price range"}
+            value={sliderValue}
+            min={0}
+            max={2000}
+            onChange={handleSliderChange}
+            valueLabelDisplay="auto"
+            getAriaValueText={valuetext}
+          />
+        </Box>
+      </div>
+      <ul className="flex gap-5 justify-center my-20 flex-wrap">
         {products.map((product) => {
           return (
-            <li className="bg-gray-300 p-4" key={product._id}>
+            <li
+              className="bg-blue-100 border border-blue-200 text-blue-900 p-4 w-72 text-center hover:border-blue-950 transition-all duration-300"
+              key={product._id}
+            >
               <Link to={`${product._id}`}>
-                <h4>{product.name}</h4>
-                <p>{product.category}</p>
-                <p>{product.price}</p>
-                <p>{product.quantity}</p>
+                <h4 className="text-2xl mb-3">{product.name}</h4>
+                <p className="text-lg">{product.category}</p>
+                <p>${product.price}</p>
+                <p>Quantity: {product.quantity}</p>
               </Link>
             </li>
           );
         })}
       </ul>
+      <div className="w-full flex justify-center">
+        <Pagination
+          count={maxPages}
+          color="primary"
+          onClick={handlePagination}
+        />
+      </div>
     </div>
   );
 }
