@@ -12,7 +12,7 @@ function ProductPage() {
   const [products, setProducts] = useState([]);
   const [maxPages, setMaxPages] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [sliderValue, setSliderValue] = React.useState([0, 10000]);
+  const [sliderValue, setSliderValue] = useState([0, 10000]);
 
   useEffect(() => {
     async function getProducts() {
@@ -27,13 +27,14 @@ function ProductPage() {
           quantity: searchParams.get("quantity"),
           minPrice: searchParams.get("minPrice"),
           maxPrice: searchParams.get("maxPrice"),
+          limit: searchParams.get("limit"),
           page: page,
         },
       };
       const res = await axios.get(`${BASE_URL}/count`, options);
       const totalProducts = res.data.count;
       const response = await axios.get(BASE_URL, options);
-      setMaxPages(Math.ceil(totalProducts / 3));
+      setMaxPages(Math.ceil(totalProducts / +searchParams.get("limit")));
       setProducts(response.data);
     }
     getProducts();
@@ -69,13 +70,15 @@ function ProductPage() {
     setSliderValue(newValue);
   };
 
+  function handleSelect() {}
+
   return (
-    <div className="flex flex-col items-center max-w-7xl m-auto">
+    <div className="flex flex-col items-center max-w-7xl m-auto pb-8">
       <div className="my-8 flex-wrap space-y-2 flex gap-4 items-baseline flex-col sm:flex-row ">
         <div className="flex items-center gap-1">
           <label htmlFor="isInStock">isInStock: </label>
-          <input
-            className="h-5 w-5"
+          <Input
+            customStyle="w-5 h-5"
             id="isInStock"
             name="isInStock"
             type="checkbox"
@@ -85,8 +88,7 @@ function ProductPage() {
         </div>
         <div>
           <label htmlFor="name">Name: </label>
-          <input
-            className="border border-blue-200"
+          <Input
             id="name"
             name="name"
             type="text"
@@ -96,14 +98,26 @@ function ProductPage() {
         </div>
         <div>
           <label htmlFor="category">Category: </label>
-          <input
-            className="border border-blue-200"
+          <Input
             id="category"
             name="category"
             type="text"
             value={searchParams.get("category") || ""}
             onChange={handleFilterChange}
           />
+        </div>
+        <div>
+          <label htmlFor="limit">Items Per Page: </label>
+          <select
+            name="limit"
+            id="limit"
+            onChange={handleFilterChange}
+            className="border border-blue-200 focus:outline-none focus:border-blue-500 transition-all duration-300"
+          >
+            <option value="9">9</option>
+            <option value="6">6</option>
+            <option value="3">3</option>
+          </select>
         </div>
       </div>
       <div className="flex gap-10 justify-center">
@@ -120,11 +134,11 @@ function ProductPage() {
           />
         </Box>
       </div>
-      <ul className="flex gap-5 justify-center my-20 flex-wrap">
+      <ul className="flex gap-5 justify-center my-10 flex-wrap">
         {products.map((product) => {
           return (
             <li
-              className="bg-blue-100 border border-blue-200 text-blue-900 p-4 w-72 text-center hover:border-blue-950 transition-all duration-300"
+              className="bg-blue-100 border border-blue-200 text-blue-900 p-4 w-1/4 min-w-80 min-h-48 flex flex-col justify-center text-center hover:border-blue-950 transition-all duration-300"
               key={product._id}
             >
               <Link to={`${product._id}`}>

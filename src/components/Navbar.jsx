@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo-no-background.png";
 
 function Navbar() {
   return (
-    <nav className="px-10 py-6  shadow-sm bg-white">
-      <div className="flex justify-between max-w-7xl m-auto">
+    <nav className="px-10 py-3  shadow-sm bg-white">
+      <div className="flex justify-between max-w-7xl m-auto items-center">
         <Link to="/" className="text-blue-900">
-          Marketplace
+          <img src={logo} alt="Souq State" className="w-32 " />
         </Link>
         <div className="flex gap-4">
           <Link

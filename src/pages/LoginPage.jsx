@@ -1,12 +1,15 @@
 import React from "react";
+const USER_URL = "http://localhost:3000/api/auth/";
+import axios from "axios";
 
 function LoginPage() {
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
     const formElem = e.target;
     const username = formElem.username.value;
     const password = formElem.password.value;
-    console.log({ username, password });
+    const res = await axios.post(USER_URL + "login", { username, password });
+    localStorage.setItem("token", res.data.token);
   }
   return (
     <div className="flex justify-center my-24">

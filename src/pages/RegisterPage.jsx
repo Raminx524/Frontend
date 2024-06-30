@@ -1,7 +1,9 @@
 import React from "react";
+const USER_URL = "http://localhost:3000/api/auth/";
+import axios from "axios";
 
 function RegisterPage() {
-  function handleRegister(e) {
+  async function handleRegister(e) {
     e.preventDefault();
     const formElem = e.target;
     const newUser = {
@@ -10,7 +12,12 @@ function RegisterPage() {
       firstName: formElem.firstName.value,
       lastName: formElem.lastName.value,
     };
-    console.log(newUser);
+    try {
+      await axios.post(USER_URL + "register", newUser);
+      console.log("User created successfully!");
+    } catch (err) {
+      console.log(err);
+    }
   }
   return (
     <div className="flex justify-center my-24">

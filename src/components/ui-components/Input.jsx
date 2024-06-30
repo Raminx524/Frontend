@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 
 function Input(props) {
   const [val, setVal] = useState("");
-  const { id, name, type, placeholder, value, handler } = props;
+  const { id, name, type, placeholder, value, customStyle } = props;
+  const style = `border border-blue-200 focus:outline-none focus:border-blue-500 transition-all duration-300 ${customStyle}`;
   useEffect(() => {
     setVal(value);
   }, []);
@@ -15,8 +16,9 @@ function Input(props) {
       value={val}
       onChange={(e) => {
         setVal(e.target.value);
+        props.onChange(e);
       }}
-      className="border border-blue-200 focus:outline-none focus:border-blue-500 transition-all duration-300"
+      className={style}
     />
   );
 }
