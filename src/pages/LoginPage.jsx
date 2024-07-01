@@ -1,15 +1,29 @@
-import React from "react";
-const USER_URL = "http://localhost:3000/api/auth/";
+import React, { useContext } from "react";
+const AUTH_URL = "http://localhost:3000/api/auth/";
+const USER_URL = "http://localhost:3000/api/protected/";
 import axios from "axios";
+import { useUserContext } from "../contexts/userContext";
+import { formatJWTTokenToUser } from "../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+  const navigate = useNavigate();
+  const user = useUserContext();
   async function handleLogin(e) {
     e.preventDefault();
     const formElem = e.target;
     const username = formElem.username.value;
     const password = formElem.password.value;
-    const res = await axios.post(USER_URL + "login", { username, password });
-    localStorage.setItem("token", res.data.token);
+    const res = await axios.post(AUTH_URL + "login", { username, password });
+    const token = res.data.token;
+    localStorage.setItem("token", token);
+    const { userId } = formatJWTTokenToUser(token);
+    const userRes = await axios.get(USER_URL + userId, {
+      headers: { Authorization: token },
+    });
+    user.login(userRes.data);
+
+    navigate("/");
   }
   return (
     <div className="flex justify-center my-24">

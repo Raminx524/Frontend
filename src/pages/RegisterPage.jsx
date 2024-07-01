@@ -1,8 +1,10 @@
 import React from "react";
 const USER_URL = "http://localhost:3000/api/auth/";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
+  const navigate = useNavigate();
   async function handleRegister(e) {
     e.preventDefault();
     const formElem = e.target;
@@ -14,7 +16,7 @@ function RegisterPage() {
     };
     try {
       await axios.post(USER_URL + "register", newUser);
-      console.log("User created successfully!");
+      navigate("/login");
     } catch (err) {
       console.log(err);
     }

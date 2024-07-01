@@ -1,7 +1,45 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { formatJWTTokenToUser } from "../utils/utils";
+import axios from "axios";
+const USER_URL = "http://localhost:3000/api/protected/";
 
-function userContext() {
-  return <div>userContext</div>;
+const UserContext = createContext(null);
+
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState();
+  const login = (userInfo) => {
+    setUser(userInfo);
+  };
+  const logout = () => {
+    setUser(null);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    async function getUserByToken() {
+      try {
+        const { userId } = formatJWTTokenToUser(token);
+        const userRes = await axios.get(USER_URL + userId, {
+          headers: { Authorization: token },
+        });
+        login(userRes.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getUserByToken();
+  }, []);
+  return (
+    <UserContext.Provider value={{ user, login, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export function useUserContext() {
+  const context = useContext(UserContext);
+  if (context === null) {
+    throw new Error("This context should only be used inside UserProvider");
+  }
+  return context;
 }
-
-export default userContext;

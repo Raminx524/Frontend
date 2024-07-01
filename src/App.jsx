@@ -7,24 +7,29 @@ import LoginPage from "./pages/LoginPage";
 import EditProductPage from "./pages/EditProductPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { UserProvider } from "./contexts/userContext";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   return (
     <>
-      <div className="bg-gray-100 min-h-screen">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/product">
-            <Route index element={<ProductPage />} />
-            <Route path=":productId" element={<ProductDetailsPage />} />
-            <Route path=":productId/edit" element={<EditProductPage />} />
-          </Route>
-        </Routes>
-      </div>
-      <Footer />
+      <UserProvider>
+        <div className="bg-gray-100 min-h-screen">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/userProfile" element={<UserProfile />} />
+            <Route path="/product">
+              <Route index element={<ProductPage />} />
+              <Route path=":productId" element={<ProductDetailsPage />} />
+              <Route path=":productId/edit" element={<EditProductPage />} />
+            </Route>
+          </Routes>
+        </div>
+        <Footer />
+      </UserProvider>
     </>
   );
 }
