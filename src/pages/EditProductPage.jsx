@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Input from "../components/ui-components/Input";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import api from "../services/api.service";
 const BASE_URL = "http://localhost:3000/api/product/";
 function EditProductPage() {
   const navigate = useNavigate();
@@ -12,12 +13,12 @@ function EditProductPage() {
     const formElem = e.target;
     const newProduct = {
       name: formElem.name.value,
-      category: formElem.category.value,
+      categories: formElem.category.value.split(", "),
       price: formElem.price.value,
       quantity: formElem.quantity.value,
     };
     try {
-      await axios.patch(BASE_URL + productId, newProduct);
+      await api.patch(BASE_URL + productId, newProduct);
       navigate(-1);
     } catch (error) {
       console.log(error);
@@ -49,7 +50,7 @@ function EditProductPage() {
           </div>
           <div className="flex justify-between min-w-72">
             <label htmlFor="category">Category:</label>
-            <Input value={product.category} id="category"></Input>
+            <Input value={product.categories.join(", ")} id="category"></Input>
           </div>
           <div className="flex justify-between min-w-72">
             <label htmlFor="price">Price:</label>

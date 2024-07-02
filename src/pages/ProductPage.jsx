@@ -13,7 +13,9 @@ function ProductPage() {
   const [maxPages, setMaxPages] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const [sliderValue, setSliderValue] = useState([0, 10000]);
-
+  useEffect(() => {
+    searchParams.set("limit", 9);
+  }, []);
   useEffect(() => {
     async function getProducts() {
       const page = searchParams.get("page");
@@ -56,7 +58,11 @@ function ProductPage() {
   }
 
   function handlePagination(ev) {
-    const value = +ev.target.innerText;
+    const elem = ev.target;
+    if (elem["data-testid"] === "NavigateNextIcon") {
+      console.log("hi");
+    }
+    const value = elem.innerText;
     searchParams.set("page", value);
     setSearchParams(searchParams);
   }
@@ -69,11 +75,9 @@ function ProductPage() {
     setSearchParams(searchParams);
     setSliderValue(newValue);
   };
-
-  function handleSelect() {}
-
   return (
     <div className="flex flex-col items-center max-w-7xl m-auto pb-8">
+      <h1 className="text-3xl font-bold pt-7 text-blue-900">All Products:</h1>
       <div className="my-8 flex-wrap space-y-2 flex gap-4 items-baseline flex-col sm:flex-row ">
         <div className="flex items-center gap-1">
           <label htmlFor="isInStock">isInStock: </label>
@@ -138,12 +142,12 @@ function ProductPage() {
         {products.map((product) => {
           return (
             <li
-              className="bg-blue-100 border border-blue-200 text-blue-900 p-4 w-1/4 min-w-80 min-h-48 flex flex-col justify-center text-center hover:border-blue-950 transition-all duration-300"
+              className="bg-blue-100 border border-blue-200 text-blue-900 p-4 w-1/4 min-w-80 flex flex-col justify-center text-center hover:border-blue-950 transition-all duration-300"
               key={product._id}
             >
               <Link to={`${product._id}`}>
                 <h4 className="text-2xl mb-3">{product.name}</h4>
-                <p className="text-lg">{product.category}</p>
+                <p className="text-lg">{product.categories.join(", ")}</p>
                 <p>${product.price}</p>
                 <p>Quantity: {product.quantity}</p>
               </Link>

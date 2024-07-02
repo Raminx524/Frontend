@@ -6,7 +6,8 @@ const USER_URL = "http://localhost:3000/api/protected/";
 const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const login = (userInfo) => {
     setUser(userInfo);
   };
@@ -25,12 +26,18 @@ export const UserProvider = ({ children }) => {
         login(userRes.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
-    getUserByToken();
+    if (token) {
+      getUserByToken();
+    } else {
+      setLoading(false);
+    }
   }, []);
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </UserContext.Provider>
   );

@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { UserProvider } from "./contexts/userContext";
 import UserProfile from "./pages/UserProfile";
+import CreateProductPage from "./pages/CreateProduct";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/userProfile" element={<UserProfile />} />
             <Route path="/product">
               <Route index element={<ProductPage />} />
+              <Route path="create" element={<CreateProductPage />} />
               <Route path=":productId" element={<ProductDetailsPage />} />
               <Route path=":productId/edit" element={<EditProductPage />} />
             </Route>

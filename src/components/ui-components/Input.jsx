@@ -16,7 +16,7 @@ function Input(props) {
       value={val}
       onChange={(e) => {
         setVal(e.target.value);
-        props.onChange(e);
+        if (props.onChange) props.onChange(e);
       }}
       className={style}
     />
