@@ -57,12 +57,7 @@ function ProductPage() {
     setSearchParams(searchParams);
   }
 
-  function handlePagination(ev) {
-    const elem = ev.target;
-    if (elem["data-testid"] === "NavigateNextIcon") {
-      console.log("hi");
-    }
-    const value = elem.innerText;
+  function handlePagination(ev, value) {
     searchParams.set("page", value);
     setSearchParams(searchParams);
   }
@@ -159,7 +154,7 @@ function ProductPage() {
         <Pagination
           count={maxPages}
           color="primary"
-          onClick={handlePagination}
+          onChange={handlePagination}
         />
       </div>
     </div>

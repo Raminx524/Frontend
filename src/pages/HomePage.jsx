@@ -4,7 +4,7 @@ import homeCartIcon from "../assets/cartIcon.png";
 
 function HomePage() {
   return (
-    <main className="flex items-center py-32 flex-grow">
+    <main className="flex items-center py-16 flex-grow">
       <div className=" flex flex-col items-left max-w-3xl m-auto text-left gap-6 z-10 relative left-20">
         <h1 className="text-6xl font-bold uppercase">
           Your Ultimate Shopping Destination
